@@ -1,4 +1,4 @@
-package project.BookRental.Repository;
+package project.BookRental.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.BookRental.entity.BorrowedEntity;

@@ -1,11 +1,13 @@
 package project.BookRental.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
 @Entity
-public class RoleEntity {
+@Table(name = "roles")
+public class RoleEntity implements GrantedAuthority {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,5 +50,10 @@ public class RoleEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, role);
+    }
+
+    @Override
+    public String getAuthority() {
+        return role;
     }
 }

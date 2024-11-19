@@ -2,6 +2,7 @@ package project.BookRental.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
@@ -18,12 +19,12 @@ public class BookEntity {
     @Column(name = "isAvailable")
     private boolean isAvailable;
     @Column(name = "isbn")
-    private int isbn;
+    private BigInteger isbn;
 
     public BookEntity() {
     }
 
-    public BookEntity(long id, String title, String author, String genre, boolean isAvailable, int isbn) {
+    public BookEntity(long id, String title, String author, String genre, boolean isAvailable, BigInteger isbn) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -72,11 +73,11 @@ public class BookEntity {
         isAvailable = available;
     }
 
-    public int getIsbn() {
+    public BigInteger getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(BigInteger isbn) {
         this.isbn = isbn;
     }
 
