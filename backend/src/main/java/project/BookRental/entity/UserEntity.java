@@ -93,4 +93,15 @@ public class UserEntity implements UserDetails {
     public int hashCode() {
         return Objects.hash(id, username, email, password, role);
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }
