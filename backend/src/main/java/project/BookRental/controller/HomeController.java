@@ -1,13 +1,23 @@
 package project.BookRental.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import project.BookRental.service.JWTService;
 
 @RestController
 public class HomeController {
 
+    @Autowired
+    private JWTService jwtService;
+
     @GetMapping("/")
     public String home() {
         return "Welcome to Book Rental System";
+    }
+
+    @GetMapping("/protected")
+    public ResponseEntity<String> getProtectedData() {
+        return ResponseEntity.ok("This is a protected resource.");
     }
 }
