@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from "./Navbar.tsx";
 
 const AddBook: React.FC = () => {
@@ -10,6 +10,38 @@ const AddBook: React.FC = () => {
     });
 
     const [message, setMessage] = useState<string | null>(null);
+    const [userRole, setUserRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchUserRole = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    setMessage('Unauthorized. Please log in again.');
+                    return;
+                }
+
+                const response = await fetch('http://localhost:8080/addbook/getrole', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const role = await response.text();
+                    setUserRole(role);
+                } else {
+                    setMessage('Failed to fetch user role.');
+                }
+            } catch (error) {
+                console.error('Error fetching role:', error);
+                setMessage('Failed to fetch user role.');
+            }
+        };
+
+        fetchUserRole();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -55,6 +87,10 @@ const AddBook: React.FC = () => {
             setMessage('Failed to add book. Please try again later.');
         }
     };
+
+    if (userRole !== 'admin') {
+        return <p>Access denied. Admin role required to add books.</p>;
+    }
 
     return (
         <div
