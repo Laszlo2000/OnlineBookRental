@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import project.BookRental.entity.BookEntity;
+import project.BookRental.entity.UserEntity;
 import project.BookRental.repository.BookRepository;
-
+import project.BookRental.repository.UserRepository;
 
 @RestController
 @RequestMapping("/addbook")
@@ -18,6 +20,9 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private UserRepository userRepository; // Szükséges a role ellenőrzéséhez
 
     @PostMapping
     public ResponseEntity<String> addBook(@RequestBody BookEntity book) {
@@ -39,4 +44,13 @@ public class BookController {
         }
     }
 
+    @GetMapping("/getrole")
+    public ResponseEntity<String> getUserRole(Authentication authentication) {
+        // Az aktuális bejelentkezett felhasználó role-ját lekérjük
+        UserEntity user = userRepository.findByUsername(authentication.getName());
+        if (user != null && user.getRole() != null) {
+            return ResponseEntity.ok(user.getRole().getRole()); // Role visszaküldése
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Role not found");
+    }
 }
