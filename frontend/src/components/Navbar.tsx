@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
-    const [isAdmin, setIsAdmin] = useState(false);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchUserRole = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                return;
-            }
-
-            try {
-                const response = await fetch('http://localhost:8080/addbook/getrole', {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (response.ok) {
-                    const role = await response.text(); // Backend sima szövegként küldi vissza
-                    setIsAdmin(role === 'admin'); // Ellenőrzés admin szerepre
-                } else {
-                    console.error('Failed to fetch role');
-                }
-            } catch (error) {
-                console.error('Error fetching role:', error);
-            }
-        };
-
-        fetchUserRole();
-    }, []);
+    const handleLogout = () => {
+        // Token törlése
+        localStorage.removeItem('token');
+        // Átirányítás a login oldalra
+        navigate('/login');
+    };
 
     return (
         <nav
@@ -105,26 +82,44 @@ const Navbar: React.FC = () => {
                 >
                     User Profile
                 </Link>
-                {isAdmin && ( // Csak admin felhasználóknak jelenik meg
-                    <Link
-                        to="/addbook"
-                        style={{
-                            color: '#fff',
-                            textDecoration: 'none',
-                            padding: '5px 10px',
-                            borderRadius: '4px',
-                            transition: 'background-color 0.3s',
-                        }}
-                        onMouseEnter={(e) =>
-                            (e.currentTarget.style.backgroundColor = '#007BFF')
-                        }
-                        onMouseLeave={(e) =>
-                            (e.currentTarget.style.backgroundColor = 'transparent')
-                        }
-                    >
-                        Add Book
-                    </Link>
-                )}
+                <Link
+                    to="/addbook"
+                    style={{
+                        color: '#fff',
+                        textDecoration: 'none',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.3s',
+                    }}
+                    onMouseEnter={(e) =>
+                        (e.currentTarget.style.backgroundColor = '#007BFF')
+                    }
+                    onMouseLeave={(e) =>
+                        (e.currentTarget.style.backgroundColor = 'transparent')
+                    }
+                >
+                    Add Book
+                </Link>
+                <button
+                    onClick={handleLogout}
+                    style={{
+                        color: '#fff',
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.3s',
+                    }}
+                    onMouseEnter={(e) =>
+                        (e.currentTarget.style.backgroundColor = '#007BFF')
+                    }
+                    onMouseLeave={(e) =>
+                        (e.currentTarget.style.backgroundColor = 'transparent')
+                    }
+                >
+                    Logout
+                </button>
             </div>
         </nav>
     );
