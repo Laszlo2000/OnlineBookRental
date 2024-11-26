@@ -16,19 +16,14 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/borrow")
 public class BookBorrowController {
-    /*
-Elfogadási kritériumok:
-A felhasználó be tud jelentkezni és kiválasztani egy könyvet a kölcsönzéshez.
-A kölcsönzés időtartama előre meghatározott (pl. 2 hét).
-A rendszer frissíti a könyv státuszát „kölcsönzött”-re és eltávolítja a listából, amíg a felhasználó vissza nem hozza.
-     */
+
     @Autowired
     private BookRepository bookRepository;
 
-    @GetMapping("/{title}")
-    public ResponseEntity<BorrowDto> bookEntityResponseEntity(@PathVariable String title, Principal principal) {
+    @PutMapping("/rent")
+    public ResponseEntity<BorrowDto> bookEntityResponseEntity(@RequestBody BorrowDto borrowDto, Principal principal) {
+        String title = borrowDto.getTitle();
         Optional<BookEntity> bookEntity = bookRepository.findByTitle(title);
 
         // Könyv lekérdezése
@@ -45,11 +40,11 @@ A rendszer frissíti a könyv státuszát „kölcsönzött”-re és eltávolí
             bookRepository.save(book);
 
             //DTO
-            BorrowDto borrowDto = new BorrowDto();
-            borrowDto.setUsername(principal.getName());
-            borrowDto.setTitle(book.getTitle());
+            BorrowDto dto = new BorrowDto();
+            dto.setUsername(principal.getName());
+            dto.setTitle(book.getTitle());
             //borrowDto.setAvailable(false);
-            borrowDto.setDueDate(LocalDate.now().plusWeeks(2));
+            dto.setDueDate(LocalDate.now().plusWeeks(2));
 
 
             return ResponseEntity.ok(borrowDto);
