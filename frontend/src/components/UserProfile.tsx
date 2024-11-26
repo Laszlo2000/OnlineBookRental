@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar'; // Importáld a Navbar-t
 
 interface UserProfileData {
     username: string;
@@ -57,54 +58,68 @@ const UserProfile: React.FC = () => {
     return (
         <div
             style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh', // A teljes képernyő magassága
-                width: '100vw', // A teljes képernyő szélessége
-                backgroundColor: '#333', // A háttér színe (meglévő dizájnhoz igazítva)
+                backgroundColor: '#242424', // Háttér szín
+                minHeight: '100vh', // Minimum magasság a képernyő kitöltéséhez
+                paddingTop: '60px', // Helyet hagyunk a fix Navbar-nak
             }}
         >
+            {/* Navbar hozzáadása */}
+            <Navbar />
+
+            {/* Tartalom */}
             <div
                 style={{
-                    maxWidth: '600px',
-                    textAlign: 'center',
-                    fontFamily: 'Arial, sans-serif',
-                    color: '#333',
-                    backgroundColor: '#f9f9f9',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     padding: '20px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
                 }}
             >
-                <h1 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 'bold' }}>User Profile</h1>
-                <p style={{ fontSize: '18px', marginBottom: '10px' }}>
-                    <strong>Username:</strong> {userData?.username}
-                </p>
-                <p style={{ fontSize: '18px', marginBottom: '10px' }}>
-                    <strong>Email:</strong> {userData?.email}
-                </p>
-                <h2 style={{ marginTop: '30px', fontSize: '20px' }}>Borrowed Books</h2>
-                {userData?.borrowedBooks && userData.borrowedBooks.length > 0 ? (
-                    <ul style={{ listStyleType: 'none', padding: 0, marginTop: '20px' }}>
-                        {userData.borrowedBooks.map((title, index) => (
-                            <li
-                                key={index}
-                                style={{
-                                    padding: '10px',
-                                    margin: '10px 0',
-                                    backgroundColor: '#e8e8e8',
-                                    borderRadius: '4px',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                {title}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p style={{ color: '#777', marginTop: '20px' }}>You have not borrowed any books.</p>
-                )}
+                <div
+                    style={{
+                        maxWidth: '600px',
+                        textAlign: 'center',
+                        fontFamily: 'Arial, sans-serif',
+                        color: '#333',
+                        backgroundColor: '#f9f9f9',
+                        padding: '20px',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    }}
+                >
+                    <h1 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 'bold' }}>
+                        User Profile
+                    </h1>
+                    <p style={{ fontSize: '18px', marginBottom: '10px' }}>
+                        <strong>Username:</strong> {userData?.username}
+                    </p>
+                    <p style={{ fontSize: '18px', marginBottom: '10px' }}>
+                        <strong>Email:</strong> {userData?.email}
+                    </p>
+                    <h2 style={{ marginTop: '30px', fontSize: '20px' }}>Borrowed Books</h2>
+                    {userData?.borrowedBooks && userData.borrowedBooks.length > 0 ? (
+                        <ul style={{ listStyleType: 'none', padding: 0, marginTop: '20px' }}>
+                            {userData.borrowedBooks.map((title, index) => (
+                                <li
+                                    key={index}
+                                    style={{
+                                        padding: '10px',
+                                        margin: '10px 0',
+                                        backgroundColor: '#e8e8e8',
+                                        borderRadius: '4px',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {title}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p style={{ color: '#777', marginTop: '20px' }}>
+                            You have not borrowed any books.
+                        </p>
+                    )}
+                </div>
             </div>
         </div>
     );

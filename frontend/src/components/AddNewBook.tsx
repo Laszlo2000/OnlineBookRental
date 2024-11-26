@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Navbar from "./Navbar.tsx";
 
 const AddBook: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -69,6 +70,11 @@ const AddBook: React.FC = () => {
                 left: 0,
             }}
         >
+
+            {/* Navbar hozzáadása */}
+            <Navbar />
+
+
             <form
                 onSubmit={handleSubmit}
                 style={{

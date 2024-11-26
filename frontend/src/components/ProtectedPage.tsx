@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from "./Navbar.tsx";
 
 const Protected: React.FC = () => {
   const [message, setMessage] = useState('');
@@ -40,6 +41,8 @@ const Protected: React.FC = () => {
 
   return (
     <div>
+        {/* Navbar hozzáadása */}
+        <Navbar />
       <h1>Protected Page</h1>
       <p>{message}</p>
     </div>
