@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 const Rent = () => {
     const [title, setTitle] = useState(""); // Könyvcím mező
     const [response, setResponse] = useState(""); // Sikeres válasz

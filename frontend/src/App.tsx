@@ -6,6 +6,7 @@ import ProtectedPage from './components/ProtectedPage';
 import UserProfile from './components/UserProfile';
 import AddBook from './components/AddNewBook';
 import Rent from "./components/Rent.tsx";
+import Return from "./components/Return.tsx";
 
 const App: React.FC = () => {
     return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
                 <Route path="/userprofile" element={<UserProfile />} />
                 <Route path="/addbook" element={<AddBook />} />
                 <Route path="/rent" element={<Rent />} />
+                <Route path="/return" element={<Return />} />
             </Routes>
         </Router>
     );

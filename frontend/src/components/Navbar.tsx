@@ -131,6 +131,42 @@ const Navbar: React.FC = () => {
                         Add Book
                     </Link>
                 )}
+                <Link
+                    to="/rent"
+                    style={{
+                        color: '#fff',
+                        textDecoration: 'none',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.3s',
+                    }}
+                    onMouseEnter={(e) =>
+                        (e.currentTarget.style.backgroundColor = '#007BFF')
+                    }
+                    onMouseLeave={(e) =>
+                        (e.currentTarget.style.backgroundColor = 'transparent')
+                    }
+                >
+                    Rent
+                </Link>
+                <Link
+                    to="/return"
+                    style={{
+                        color: '#fff',
+                        textDecoration: 'none',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.3s',
+                    }}
+                    onMouseEnter={(e) =>
+                        (e.currentTarget.style.backgroundColor = '#007BFF')
+                    }
+                    onMouseLeave={(e) =>
+                        (e.currentTarget.style.backgroundColor = 'transparent')
+                    }
+                >
+                    Return
+                </Link>
                 <button
                     onClick={handleLogout}
                     style={{

@@ -3,46 +3,67 @@ package project.BookRental.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import project.BookRental.dto.BorrowDto;
 import project.BookRental.entity.BookEntity;
+import project.BookRental.entity.BorrowedEntity;
+import project.BookRental.entity.UserEntity;
 import project.BookRental.repository.BookRepository;
+import project.BookRental.repository.BorrowedRepository;
+import project.BookRental.repository.UserRepository;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/return")
 public class ReturnBookController {
-
     @Autowired
     private BookRepository bookRepository;
 
-    // Könyv visszajuttatása
-    @GetMapping("/{title}")
-    public ResponseEntity<String> returnBook(@PathVariable String title) {
-        Optional<BookEntity> bookEntity = bookRepository.findByTitle(title);
+    @Autowired
+    private UserRepository userRepository;
 
-        // Ha a könyv nem található az adatbázisban
-        if (!bookEntity.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("A megadott című könyv nem található az adatbázisban.");
+    @Autowired
+    private BorrowedRepository borrowedRepository;
+    @PutMapping("/return")
+    public ResponseEntity<BorrowDto> returnBook(@RequestBody BorrowDto borrowDto, Principal principal) {
+        //Kérjük le a könyv címét a DTO-ból
+        String title = borrowDto.getTitle();
+
+        //Könyv lekérése
+        Optional<BookEntity> bookEntity = bookRepository.findByTitle(title);
+        if (bookEntity.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Ha nincs ilyen könyv
+        }
+
+        //Felhasználó lekérése
+        Optional<UserEntity> userEntity = Optional.ofNullable(userRepository.findByUsername(principal.getName()));
+        if (userEntity.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // Ha a felhasználó nem található
         }
 
         BookEntity book = bookEntity.get();
-
-        // Ha a könyv már elérhető, nincs mit visszaadni
-        if (book.isAvailable()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Ez a könyv már elérhető az adatbázisban, nem szükséges visszajuttatni.");
+        UserEntity user = userEntity.get();
+        //Kölcsönzés ellenőrzése
+        Optional<BorrowedEntity> borrowedEntity = borrowedRepository.findByBookAndUser(book, user);
+        if (borrowedEntity.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Ha a kölcsönzés nem található
         }
 
-        // Könyv elérhetőség visszaállítása
+        //Kölcsönzés törlése
+        borrowedRepository.delete(borrowedEntity.get());
+
+        //Könyv elérhetőségének visszaállítása
         book.setAvailable(true);
         bookRepository.save(book);
 
-        return ResponseEntity.ok("A könyv sikeresen visszakerült az adatbázisba.");
+        //Válasz DTO elkészítése
+        BorrowDto responseDto = new BorrowDto();
+        responseDto.setUsername(principal.getName());
+        responseDto.setTitle(book.getTitle());
+
+        return ResponseEntity.ok(responseDto);
     }
 }
-

@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import project.BookRental.dto.BorrowDto;
 import project.BookRental.dto.UserProfileDto;
 import project.BookRental.entity.BookEntity;
+import project.BookRental.entity.BorrowedEntity;
 import project.BookRental.entity.UserEntity;
 import project.BookRental.repository.BookRepository;
+import project.BookRental.repository.BorrowedRepository;
 import project.BookRental.repository.UserRepository;
 
 import java.security.Principal;
@@ -20,11 +22,25 @@ public class BookBorrowController {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private BorrowedRepository borrowedRepository;
 
     @PutMapping("/rent")
     public ResponseEntity<BorrowDto> bookEntityResponseEntity(@RequestBody BorrowDto borrowDto, Principal principal) {
         String title = borrowDto.getTitle();
         Optional<BookEntity> bookEntity = bookRepository.findByTitle(title);
+
+        // Felhasználó lekérdezése
+        Optional<UserEntity> userEntity = Optional.ofNullable(userRepository.findByUsername(principal.getName()));
+        if (userEntity.isEmpty()) {
+            // Ha nincs ilyen felhasználó
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        UserEntity user = userEntity.get();
+
 
         // Könyv lekérdezése
         if (bookEntity.isPresent()) {
@@ -35,16 +51,21 @@ public class BookBorrowController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
+
             // Könyv frissítése
             book.setAvailable(false);
             bookRepository.save(book);
+
+            BorrowedEntity borrowed = new BorrowedEntity();
+            borrowed.setBook(book);
+            borrowed.setUser(user);
+            borrowedRepository.save(borrowed);
 
             //DTO
             BorrowDto dto = new BorrowDto();
             dto.setUsername(principal.getName());
             dto.setTitle(book.getTitle());
-            //borrowDto.setAvailable(false);
-            dto.setDueDate(LocalDate.now().plusWeeks(2));
+            //dto.setDueDate(LocalDate.now().plusWeeks(2));
 
 
             return ResponseEntity.ok(borrowDto);
@@ -54,4 +75,5 @@ public class BookBorrowController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
+
 
