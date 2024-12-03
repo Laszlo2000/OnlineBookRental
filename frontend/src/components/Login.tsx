@@ -33,33 +33,9 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh", // A teljes képernyő magassága
-        width: "100vw", // A teljes képernyő szélessége
-        backgroundColor: "#242424", // Háttérszín
-        position: "fixed", // Fix helyzet
-        top: 0,
-        left: 0
-      }}
-    >
-      <form
-        onSubmit={handleLogin}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          width: "300px", // Az űrlap szélessége
-          backgroundColor: "#242424", // Űrlap háttérszín
-          padding: "20px",
-          borderRadius: "8px", // Lekerekített sarkok
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" // Árnyék
-        }}
-      >
-        <h1 style={{ textAlign: "center", color: "#fff", marginBottom: "20px" }}>Login</h1>
+    <div className="flex justify-center items-center h-screen w-screen bg-zinc-850 fixed top-0 left-0">
+      <form onSubmit={handleLogin} className="flex flex-col gap-4 w-72 bg-zinc-700 p-6 rounded-lg shadow-lg">
+        <h1 className="text-center text-white mb-5 text-3xl">Login</h1>
         <input
           type="text"
           name="username"
@@ -67,13 +43,7 @@ const Login: React.FC = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          style={{
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            backgroundColor: "#000",
-            color: "#fff"
-          }}
+          className="p-2 border border-gray-300 rounded-md bg-black text-white"
         />
         <input
           type="password"
@@ -82,38 +52,18 @@ const Login: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            backgroundColor: "#000",
-            color: "#fff"
-          }}
+          className="p-2 border border-gray-300 rounded-md bg-black text-white"
         />
-        <button
-          type="submit"
-          style={{
-            padding: "10px",
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}
-        >
+        <button type="submit" className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md cursor-pointer">
           Login
         </button>
-        {error && (
-          <p
-            style={{
-              marginTop: "10px",
-              textAlign: "center",
-              color: "red"
-            }}
-          >
-            {error}
-          </p>
-        )}
+        <p className="text-center">
+          Does not have an account? <br />{" "}
+          <a href="/register" className="text-blue-400">
+            Register here!
+          </a>
+        </p>
+        {error && <p className="mt-2 text-center text-red-600 text-lg font-bold">{error}</p>}
       </form>
     </div>
   );

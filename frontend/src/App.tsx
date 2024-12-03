@@ -31,7 +31,11 @@ const NavBarWithConditionalRender: React.FC = () => { //A /login és /register e
     if (location.pathname === '/login' || location.pathname === '/register') {
         return null;
     }
-    return <Navbar />;
+    return (
+        <div className='p-10'>
+            <Navbar />
+        </div>
+    );
 };
 
 export default App;
