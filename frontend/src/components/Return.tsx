@@ -58,6 +58,7 @@ const Return: React.FC = () => {
 
     return (
         <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
+            <Navbar/>
             <h2>Könyv visszaadása</h2>
             <form
                 onSubmit={(e) => {
