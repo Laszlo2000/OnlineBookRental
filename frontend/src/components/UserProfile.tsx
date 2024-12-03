@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar'; // Importáld a Navbar-t
 
 interface UserProfileData {
     username: string;
@@ -63,9 +62,6 @@ const UserProfile: React.FC = () => {
                 paddingTop: '60px', // Helyet hagyunk a fix Navbar-nak
             }}
         >
-            {/* Navbar hozzáadása */}
-            <Navbar />
-
             {/* Tartalom */}
             <div
                 style={{

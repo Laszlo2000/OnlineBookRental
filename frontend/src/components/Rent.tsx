@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import Navbar from "./Navbar.tsx";
 
 const Rent = () => {
     const [title, setTitle] = useState(""); // Könyvcím mező
@@ -58,7 +57,6 @@ const Rent = () => {
 
     return (
         <div style={{ padding: "1rem", fontFamily: "Arial, sans-serif", justifyContent: 'center', alignItems: 'center',}}>
-            <Navbar />
             <h1>Könyv kölcsönzése</h1>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <label htmlFor="title" style={{ marginBottom: "0.5rem" }}>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import Navbar from "./Navbar.tsx";
 
 const Return: React.FC = () => {
     const [title, setTitle] = useState<string>(""); 
@@ -58,7 +57,6 @@ const Return: React.FC = () => {
 
     return (
         <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-            <Navbar/>
             <h2>Könyv visszaadása</h2>
             <form
                 onSubmit={(e) => {
