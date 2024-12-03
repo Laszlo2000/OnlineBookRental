@@ -1,20 +1,28 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import Navbar from "./Navbar.tsx";
 
 const Return: React.FC = () => {
-    // Állapotok az űrlap és az üzenetek kezelésére
-    const [title, setTitle] = useState<string>(""); // Könyvcím
-    const [response, setResponse] = useState<string | null>(null); // Sikeres válasz
-    const [error, setError] = useState<string | null>(null); // Hibaüzenet
+    const [title, setTitle] = useState<string>(""); 
+    const [response, setResponse] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleReturn = async () => {
         // Előző válaszok és hibák törlése
         setResponse(null);
         setError(null);
 
-        // Ellenőrizd, hogy megadtak-e címet
         if (!title.trim()) {
             setError("Kérlek, add meg a könyv címét!");
             return;
+        }
+
+        const token = localStorage.getItem('token'); // Kiszedjük a Local Storage-ből a JWT-t
+
+        if (!token) {
+          navigate('/login'); // Ha nem sikerült megkapni a tokent, akkor visszaküldjük a felhasználót a loginra
+          return;
         }
 
         try {
@@ -22,6 +30,7 @@ const Return: React.FC = () => {
                 method: "PUT",
                 credentials: "include",
                 headers: {
+                    'Authorization': `Bearer ${token}`, // A JWT-t odaadjuk a headernek
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ title }),
@@ -41,6 +50,8 @@ const Return: React.FC = () => {
             }
         } catch (err) {
             setError("Hálózati hiba történt.");
+            localStorage.removeItem('token'); // Az invalid tokent töröljük.
+            navigate('/login'); // Visszaküldjül a loginra ha unauthorized    
         }
     };
 

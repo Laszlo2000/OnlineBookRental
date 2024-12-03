@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-
+import { useNavigate } from 'react-router-dom';
+import Navbar from "./Navbar.tsx";
 
 const Rent = () => {
     const [title, setTitle] = useState(""); // Könyvcím mező
     const [response, setResponse] = useState(""); // Sikeres válasz
     const [error, setError] = useState(""); // Hibaüzenet
+    const navigate = useNavigate();
 
     const handleBorrow = async () => {
         // Előző állapotok törlése
@@ -15,12 +17,20 @@ const Rent = () => {
             setError("Kérlek, add meg a könyv címét!");
             return;
         }
+        const token = localStorage.getItem('token'); // Kiszedjük a Local Storage-ből a JWT-t
+
+        if (!token) {
+            setError('Nincs érvényes token. Kérlek, jelentkezz be!');
+            navigate('/login');
+            return;
+        }
 
         try {
             const res = await fetch("http://localhost:8080/rent", {
                 method: "PUT",
                 credentials: "include",
                 headers: {
+                    'Authorization': `Bearer ${token}`, // A JWT-t odaadjuk a headernek
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ title }),
@@ -40,6 +50,9 @@ const Rent = () => {
             }
         } catch (err) {
             setError("Hálózati hiba történt.");
+            localStorage.removeItem('token'); // Az invalid tokent töröljük
+            navigate('/login'); // Visszaküldjük a login oldalra
+
         }
     };
 
