@@ -76,24 +76,6 @@ const Navbar: React.FC = () => {
                 }}
             >
                 <Link
-                    to="/protected"
-                    style={{
-                        color: '#fff',
-                        textDecoration: 'none',
-                        padding: '5px 10px',
-                        borderRadius: '4px',
-                        transition: 'background-color 0.3s',
-                    }}
-                    onMouseEnter={(e) =>
-                        (e.currentTarget.style.backgroundColor = '#007BFF')
-                    }
-                    onMouseLeave={(e) =>
-                        (e.currentTarget.style.backgroundColor = 'transparent')
-                    }
-                >
-                    Protected
-                </Link>
-                <Link
                     to="/userprofile"
                     style={{
                         color: '#fff',

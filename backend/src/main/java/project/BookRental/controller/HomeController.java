@@ -15,9 +15,4 @@ public class HomeController {
     public String home() {
         return "Welcome to Book Rental System";
     }
-
-    @GetMapping("/protected")
-    public ResponseEntity<String> getProtectedData() {
-        return ResponseEntity.ok("This is a protected resource.");
-    }
 }
