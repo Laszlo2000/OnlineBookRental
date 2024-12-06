@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class BorrowDto {
     private String username;
     private String title;
-    private LocalDate dueDate;
 
     public BorrowDto() {
     }
@@ -26,11 +25,4 @@ public class BorrowDto {
         this.title = title;
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
-    }
 }

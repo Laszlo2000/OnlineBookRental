@@ -7,6 +7,7 @@ const Rent = () => {
   const [error, setError] = useState(""); // Hibaüzenet
   const navigate = useNavigate();
 
+
   const handleBorrow = async () => {
     // Előző állapotok törlése
     setResponse("");

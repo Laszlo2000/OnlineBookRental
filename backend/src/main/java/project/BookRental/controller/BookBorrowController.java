@@ -15,7 +15,9 @@ import project.BookRental.repository.UserRepository;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class BookBorrowController {
@@ -26,6 +28,7 @@ public class BookBorrowController {
     private UserRepository userRepository;
     @Autowired
     private BorrowedRepository borrowedRepository;
+
 
     @PutMapping("/rent")
     public ResponseEntity<BorrowDto> bookEntityResponseEntity(@RequestBody BorrowDto borrowDto, Principal principal) {
@@ -51,7 +54,6 @@ public class BookBorrowController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
-
             // Könyv frissítése
             book.setAvailable(false);
             bookRepository.save(book);
@@ -65,8 +67,6 @@ public class BookBorrowController {
             BorrowDto dto = new BorrowDto();
             dto.setUsername(principal.getName());
             dto.setTitle(book.getTitle());
-            //dto.setDueDate(LocalDate.now().plusWeeks(2));
-
 
             return ResponseEntity.ok(borrowDto);
         }

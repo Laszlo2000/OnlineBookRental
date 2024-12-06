@@ -15,4 +15,5 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query("SELECT b FROM BookEntity b JOIN BorrowedEntity br ON b.id = br.book.id WHERE br.user.id = :userId")
     List<BookEntity> findBorrowedBooksByUserId(@Param("userId") Long userId);
+
 }
