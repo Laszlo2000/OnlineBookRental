@@ -24,4 +24,7 @@ public class UserController {
 
         return userService.verify(user);
     }
+
+    @GetMapping("/users")
+    public List<UserEntity> getAllUsers() { return userService.getAllUsers(); }
 }
