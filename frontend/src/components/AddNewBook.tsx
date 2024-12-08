@@ -91,122 +91,55 @@ const AddBook: React.FC = () => {
         return <p>Access denied. Admin role required to add books.</p>;
     }
 
-    return (
-        <div
-            style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh', // A teljes képernyő magassága
-                width: '100vw', // A teljes képernyő szélessége
-                backgroundColor: '#242424', // Háttérszín
-                position: 'fixed', // Fix helyzet a képernyőn
-                top: 0,
-                left: 0,
-            }}
-        >
-
-            <form
-                onSubmit={handleSubmit}
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
-                    width: '300px', // Az űrlap szélessége
-                    backgroundColor: '#242424', // Űrlap háttérszín
-                    padding: '20px',
-                    borderRadius: '8px', // Lekerekített sarkok
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Árnyék
-                }}
-            >
-                <h1 style={{ textAlign: 'center', color: '#fff', marginBottom: '20px' }}>Add New Book</h1>
-                <input
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                    style={{
-                        padding: '10px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        backgroundColor: '#000',
-                        color: '#fff',
-                    }}
-                />
-                <input
-                    type="text"
-                    name="author"
-                    placeholder="Author"
-                    value={formData.author}
-                    onChange={handleChange}
-                    required
-                    style={{
-                        padding: '10px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        backgroundColor: '#000',
-                        color: '#fff',
-                    }}
-                />
-                <input
-                    type="text"
-                    name="genre"
-                    placeholder="Genre"
-                    value={formData.genre}
-                    onChange={handleChange}
-                    required
-                    style={{
-                        padding: '10px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        backgroundColor: '#000',
-                        color: '#fff',
-                    }}
-                />
-                <input
-                    type="text"
-                    name="isbn"
-                    placeholder="ISBN"
-                    value={formData.isbn}
-                    onChange={handleChange}
-                    required
-                    style={{
-                        padding: '10px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        backgroundColor: '#000',
-                        color: '#fff',
-                    }}
-                />
-                <button
-                    type="submit"
-                    style={{
-                        padding: '10px',
-                        backgroundColor: '#007BFF',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                    }}
-                >
-                    Add Book
-                </button>
-                {message && (
-                    <p
-                        style={{
-                            marginTop: '10px',
-                            textAlign: 'center',
-                            color: message.includes('successfully') ? 'green' : 'red',
-                        }}
-                    >
-                        {message}
-                    </p>
-                )}
-            </form>
-        </div>
-    );
+  return (
+    <div className="flex justify-center items-center h-screen w-screen bg-zinc-850 fixed top-0 left-0">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-72 bg-zinc-700 p-6 rounded-lg shadow-lg">
+        <h1 className="text-center text-white mb-5 text-3xl">Add New Book</h1>
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+          className="p-2 border border-gray-300 rounded-md bg-black text-white"
+        />
+        <input
+          type="text"
+          name="author"
+          placeholder="Author"
+          value={formData.author}
+          onChange={handleChange}
+          required
+          className="p-2 border border-gray-300 rounded-md bg-black text-white"
+        />
+        <input
+          type="text"
+          name="genre"
+          placeholder="Genre"
+          value={formData.genre}
+          onChange={handleChange}
+          required
+          className="p-2 border border-gray-300 rounded-md bg-black text-white"
+        />
+        <input
+          type="text"
+          name="isbn"
+          placeholder="ISBN"
+          value={formData.isbn}
+          onChange={handleChange}
+          required
+          className="p-2 border border-gray-300 rounded-md bg-black text-white"
+        />
+        <button className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md cursor-pointer">Add Book</button>
+        {message && (
+          <p className={`mt-2 text-center ${message.includes("successfully") ? "text-green-500" : "text-red-500"}`}>
+            {message}
+          </p>
+        )}
+      </form>
+    </div>
+  );
 };
 
 export default AddBook;
