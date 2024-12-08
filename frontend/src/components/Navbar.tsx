@@ -46,24 +46,24 @@ const Navbar: React.FC = () => {
       <div className="flex gap-6">
         <Link
           to="/userprofile"
-          className="hover:bg-zinc-700 px-2 py-2 rounded transition duration-300 hover:text-white"
+          className="hover:bg-[#254729] px-2 py-2 rounded transition duration-300 hover:text-white"
         >
           User Profile
         </Link>
         {isAdmin && (
-          <Link to="/addbook" className="hover:bg-zinc-700 px-2 py-2 rounded transition duration-300 hover:text-white">
+          <Link to="/addbook" className="hover:bg-[#254729] px-2 py-2 rounded transition duration-300 hover:text-white">
             Add Book
           </Link>
         )}
-        <Link to="/rent" className="hover:bg-zinc-700 px-2 py-2 rounded transition duration-300 hover:text-white">
+        <Link to="/rent" className="hover:bg-[#254729] px-2 py-2 rounded transition duration-300 hover:text-white">
           Borrow
         </Link>
-        <Link to="/return" className="hover:bg-zinc-700 px-2 py-2 rounded transition duration-300 hover:text-white">
+        <Link to="/return" className="hover:bg-[#254729] px-2 py-2 rounded transition duration-300 hover:text-white">
           Return
         </Link>
         <button
           onClick={handleLogout}
-          className="hover:bg-zinc-700 px-2 py-2 rounded transition duration-300 hover:text-white"
+          className="hover:bg-[#254729] px-2 py-2 rounded transition duration-300 hover:text-white"
         >
           Logout
         </button>
