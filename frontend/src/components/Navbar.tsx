@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-zinc-800 text-white shadow-lg z-50 flex items-center justify-between px-12 py-4">
+    <nav className="fixed top-0 left-0 w-full text-white z-50 flex items-center justify-between px-12 py-4 bg-[#336438] shadow-[0px_0px_10px_5px_rgba(0,0,0,0.4)]">
       <div className="text-lg font-bold">Online Book Rental</div>
       <div className="flex gap-6">
         <Link

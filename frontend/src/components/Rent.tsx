@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
 
 
+
 interface Book {
   id: number;
   title: string;
@@ -52,7 +53,7 @@ const Rent = () => {
       } else if (res.ok) {
         const data = await res.json();
         setResponse(
-          `You have successfully checked out the book "${data.title}"!`
+          `You have successfully checked out the book "${data.title}"`
         );
         setRegisteredBooks((prevBooks) =>
           prevBooks.map((book) =>
@@ -101,9 +102,9 @@ const Rent = () => {
 
 
   return (
-    <div className="bg-zinc-850 min-h-screen pt-16">
+    <div className="bg-[#D6EFD8] pt-16 pb-2">
       <div className="flex justify-center items-center p-5">
-        <div className="max-w-xl min-w-96 text-center font-sans text-zinc-800 bg-zinc-100 p-6 rounded-lg shadow-lg">
+        <div className="max-w-96 min-w-96 text-center text-black bg-[#80AF81] p-6 rounded-xl shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
           <h1 className="mb-5 text-2xl font-bold">Borrow a book</h1>
           <form
             onSubmit={(e) => {
@@ -112,45 +113,46 @@ const Rent = () => {
             }}
           >
             <div>
-              <label htmlFor="title" className="block pb-3">
-                Select a book
-              </label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Choose a book"
-                className="p-2 mb-4 border border-gray-300 rounded-md"
-              />
+            <select
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    className="p-2 mb-4 border border-gray-300 rounded-md max-w-50px"
+                >
+                  <option value="">Choose a book</option>
+                  {registeredBooks.filter((book) => book.available).map((book, index) => (
+                      <option key={index} value={book.title}>
+                        {book.title}
+                      </option>
+                  ))}
+                </select>
             </div>
             <button
               type="submit"
-              className="w-28 p-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md cursor-pointer"
+              className="w-28 p-2 px-4 bg-[#2b3b2d] hover:bg-[#202b21] text-white rounded"
             >
               Borrow
             </button>
           </form>
-          {response && <p className="text-green-500 mt-4 font-bold">{response}</p>}
-          {error && <p className="text-red-500 mt-4 font-bold">{error}</p>}
+          {response && <p className="mt-4 font-bold">{response}</p>}
+          {error && <p className=" mt-4 font-bold">{error}</p>}
         </div>
       </div>
 
       {registeredBooks.length > 0 ? (
-          <div className="max-w-xl mx-auto mt-5 overflow-x-auto">
-            <Table>
-              <TableHeader>
+          <div className="max-w-7xl mx-auto mt-5 overflow-x-auto rounded bg-[#80AF81] border-gray-700 rounded-xl shadow-[0px_0px_30px_rgba(0,0,0,0.3)]">
+            <Table className="">
+              <TableHeader className="bg-[#508D4E] border-b-2 border-[#D6EFD8]">
               <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Author</TableHead>
-                <TableHead>ISBN</TableHead>
+                <TableHead className="font-bold">Title</TableHead>
+                <TableHead className="font-bold">Author</TableHead>
+                <TableHead className="font-bold">ISBN</TableHead>
               </TableRow>
               </TableHeader>
               <TableBody>
               {registeredBooks.filter((book) => book.available).map((book) => (
-                  <TableRow key={book.id}>
-                    <TableCell>{book.id}</TableCell>
+                  <TableRow className="text-black font-bold border-[#D6EFD8] border-b-2" key={book.id}>
                     <TableCell>{book.title}</TableCell>
                     <TableCell>{book.author}</TableCell>
                     <TableCell>{book.isbn}</TableCell>
