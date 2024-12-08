@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
+
 
 interface Book {
   id: number;
@@ -82,6 +84,7 @@ const Rent = () => {
         }
 
         const books: Book[] = await response.json();
+        console.log(books)
         setRegisteredBooks(books);
       } catch (err: any) {
         console.error("Error:", err.message);
@@ -132,28 +135,26 @@ const Rent = () => {
 
       {registeredBooks.length > 0 ? (
           <div className="max-w-xl mx-auto mt-5 overflow-x-auto">
-            <table className="table-auto border-collapse border border-gray-300 w-full text-sm text-left">
-              <thead className="bg-gray-200">
-              <tr>
-                <th className="border border-gray-300 px-4 py-2">ID</th>
-                <th className="border border-gray-300 px-4 py-2">Title</th>
-                <th className="border border-gray-300 px-4 py-2">Author</th>
-                <th className="border border-gray-300 px-4 py-2">Available</th>
-                <th className="border border-gray-300 px-4 py-2">ISBN</th>
-              </tr>
-              </thead>
-              <tbody>
-              {registeredBooks.map((book) => (
-                  <tr key={book.id} className="hover:bg-gray-100">
-                    <td className="border border-gray-300 px-4 py-2">{book.id}</td>
-                    <td className="border border-gray-300 px-4 py-2">{book.title}</td>
-                    <td className="border border-gray-300 px-4 py-2">{book.author}</td>
-                    <td className="border border-gray-300 px-4 py-2">{book.available}</td>
-                    <td className="border border-gray-300 px-4 py-2">{book.isbn}</td>
-                  </tr>
+            <Table>
+              <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Author</TableHead>
+                <TableHead>ISBN</TableHead>
+              </TableRow>
+              </TableHeader>
+              <TableBody>
+              {registeredBooks.filter((book) => book.available).map((book) => (
+                  <TableRow key={book.id}>
+                    <TableCell>{book.id}</TableCell>
+                    <TableCell>{book.title}</TableCell>
+                    <TableCell>{book.author}</TableCell>
+                    <TableCell>{book.isbn}</TableCell>
+                  </TableRow>
               ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
       ) : (
           <p className="text-gray-500 text-center mt-5">
