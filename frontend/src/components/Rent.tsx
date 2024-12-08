@@ -9,6 +9,7 @@ interface Book {
   title: string;
   author: string;
   available: boolean;
+  genre: string;
   isbn: BigInteger;
 }
 
@@ -88,7 +89,6 @@ const Rent = () => {
         }
 
         const books: Book[] = await response.json();
-        console.log(books)
         setRegisteredBooks(books);
       } catch (err: any) {
         console.error("Error:", err.message);
@@ -147,6 +147,7 @@ const Rent = () => {
               <TableRow>
                 <TableHead className="font-bold">Title</TableHead>
                 <TableHead className="font-bold">Author</TableHead>
+                <TableHead className="font-bold">Genre</TableHead>
                 <TableHead className="font-bold">ISBN</TableHead>
               </TableRow>
               </TableHeader>
@@ -155,6 +156,7 @@ const Rent = () => {
                   <TableRow className="text-black font-bold border-[#D6EFD8] border-b-2" key={book.id}>
                     <TableCell>{book.title}</TableCell>
                     <TableCell>{book.author}</TableCell>
+                    <TableCell>{book.genre}</TableCell>
                     <TableCell>{book.isbn}</TableCell>
                   </TableRow>
               ))}
