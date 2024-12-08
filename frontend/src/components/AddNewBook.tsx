@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
 
 
 interface RegisteredUser {
     id: number;
     username: string;
     email: string;
-    role: string;
+    role: {
+        authority: string;
+    }
 }
 
 const AddBook: React.FC = () => {
@@ -61,12 +64,13 @@ const AddBook: React.FC = () => {
                     },
                 });
 
-                if (!response.ok) {
+                if (response.ok) {
+                    const users: RegisteredUser[] = await response.json();
+                    setRegisteredUsers(users);
+                } else{
                     throw new Error("Failed to fetch registered users.");
                 }
 
-                const users: RegisteredUser[] = await response.json();
-                setRegisteredUsers(users);
             } catch (err: any) {
                 console.error("Error:", err.message);
                 setMessage("Failed to load registered users. Please try again later.");
@@ -128,7 +132,8 @@ const AddBook: React.FC = () => {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen w-screen bg-zinc-850 fixed top-0 left-0">
+        <>
+        <div className="flex justify-center items-center w-screen bg-zinc-850 fixed left-0">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-72 bg-zinc-700 p-6 rounded-lg shadow-lg">
                 <h1 className="text-center text-white mb-5 text-3xl">Add New Book</h1>
                 <input
@@ -174,38 +179,38 @@ const AddBook: React.FC = () => {
                     </p>
                 )}
             </form>
-
+        </div>
+        <div className='flex justify-center items-center h-screen w-screen bg-zinc-850 fixed top-60'>
             {registeredUsers.length > 0 ? (
-                <div className="max-w-xl mx-auto mt-5 overflow-x-auto">
-                    <table className="table-auto border-collapse border border-gray-300 w-full text-sm text-left">
-                        <thead className="bg-gray-200">
-                        <tr>
-                            <th className="border border-gray-300 px-4 py-2">ID</th>
-                            <th className="border border-gray-300 px-4 py-2">Username</th>
-                            <th className="border border-gray-300 px-4 py-2">Email</th>
-                            <th className="border border-gray-300 px-4 py-2">Role</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                <div>
+                    <Table >
+                        <TableHeader >
+                        <TableRow>
+                            <TableHead>ID</TableHead>
+                            <TableHead>Username</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Role</TableHead>
+                        </TableRow>
+                        </TableHeader>
+                        <TableBody>
                         {registeredUsers.map((user) => (
-                            <tr key={user.id} className="hover:bg-gray-100">
-                                <td className="border border-gray-300 px-4 py-2">{user.id}</td>
-                                <td className="border border-gray-300 px-4 py-2">{user.username}</td>
-                                <td className="border border-gray-300 px-4 py-2">{user.email}</td>
-                                {/*<td className="border border-gray-300 px-4 py-2">{user.role}</td>*/}
-                            </tr>
+                            <TableRow key={user.id}>
+                                <TableCell>{user.id}</TableCell>
+                                <TableCell>{user.username}</TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell>{user.role.authority}</TableCell>
+                            </TableRow>
                         ))}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                 </div>
             ) : (
                 <p className="text-gray-500 text-center mt-5">
                     No registered users found.
                 </p>
             )}
-
         </div>
-
+    </>
     );
 };
 

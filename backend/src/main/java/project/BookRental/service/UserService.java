@@ -11,6 +11,8 @@ import project.BookRental.entity.UserEntity;
 import project.BookRental.repository.RoleRepository;
 import project.BookRental.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -46,4 +48,7 @@ public class UserService {
         return "Login failed";
     }
 
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
+    }
 }
