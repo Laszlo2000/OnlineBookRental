@@ -7,7 +7,7 @@ interface RegisteredUser {
     username: string;
     email: string;
     role: {
-        authority: string;
+        id: string;
     }
 }
 
@@ -52,35 +52,35 @@ const AddBook: React.FC = () => {
             }
         };
 
-        const fetchRegisteredUsers = async () => {
-            const token = localStorage.getItem('token');
-
-            try {
-                const response = await fetch("http://localhost:8080/users", {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                });
-
-                if (response.ok) {
-                    const users: RegisteredUser[] = await response.json();
-                    setRegisteredUsers(users);
-                } else{
-                    throw new Error("Failed to fetch registered users.");
-                }
-
-            } catch (err: any) {
-                console.error("Error:", err.message);
-                setMessage("Failed to load registered users. Please try again later.");
-            }
-        };
-
         fetchUserRole();
         fetchRegisteredUsers();
 
     }, []);
+    
+    const fetchRegisteredUsers = async () => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await fetch("http://localhost:8080/users", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                const users: RegisteredUser[] = await response.json();
+                setRegisteredUsers(users);
+            } else{
+                throw new Error("Failed to fetch registered users.");
+            }
+
+        } catch (err: any) {
+            console.error("Error:", err.message);
+            setMessage("Failed to load registered users. Please try again later.");
+        }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -130,6 +130,29 @@ const AddBook: React.FC = () => {
     if (userRole !== 'admin') {
         return <p>Access denied. Admin role required to add books.</p>;
     }
+
+    const handleRoleChange = async (userId: number, newRoleId: number) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:8080/${userId}/role`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ roleId: newRoleId }),
+            });
+    
+            if (response.ok) {
+                console.log("Role updated successfully");
+                await fetchRegisteredUsers();
+            } else {
+                console.error("Failed to update role");
+            }
+        } catch (error) {
+            console.error("Error updating role:", error);
+        }
+    };
 
     return (
         <>
@@ -198,7 +221,15 @@ const AddBook: React.FC = () => {
                                 <TableCell>{user.id}</TableCell>
                                 <TableCell>{user.username}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.role.authority}</TableCell>
+                                <TableCell>
+                                    <select 
+                                    value={user.role.id}
+                                    onChange={(e) => handleRoleChange(user.id, Number(e.target.value))}
+                                    className='bg-gray-700 border border-gray-600'>
+                                        <option value="2">User</option>
+                                        <option value="1">Admin</option>
+                                    </select>
+                                </TableCell>
                             </TableRow>
                         ))}
                         </TableBody>

@@ -1,11 +1,13 @@
 package project.BookRental.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.BookRental.entity.RoleEntity;
 import project.BookRental.entity.UserEntity;
 import project.BookRental.repository.RoleRepository;
@@ -50,5 +52,17 @@ public class UserService {
 
     public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Transactional
+    public void updateUserRole(Long userId, Long newRoleId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        RoleEntity newRole = roleRepository.findById(newRoleId)
+                .orElseThrow(() -> new EntityNotFoundException("Role not found"));
+
+        user.setRole(newRole);
+        userRepository.save(user);
     }
 }
