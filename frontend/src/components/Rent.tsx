@@ -12,15 +12,14 @@ interface Book {
 }
 
 const Rent = () => {
-  const [title, setTitle] = useState(""); // Könyvcím mező
-  const [response, setResponse] = useState(""); // Sikeres válasz
-  const [error, setError] = useState(""); // Hibaüzenet
+  const [title, setTitle] = useState("");
+  const [response, setResponse] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const [registeredBooks, setRegisteredBooks] = useState<Book[]>([]);
 
   const handleBorrow = async () => {
-    // Előző állapotok törlése
     setResponse("");
     setError("");
 
@@ -53,15 +52,19 @@ const Rent = () => {
       } else if (res.ok) {
         const data = await res.json();
         setResponse(
-          `You have successfully checked out the book "${data.title}"!` // Vissza kell hozni: ${data.dueDate}.`
+          `You have successfully checked out the book "${data.title}"!`
         );
+        setRegisteredBooks((prevBooks) =>
+          prevBooks.map((book) =>
+            book.title === data.title ? { ...book, available: false } : book
+          ));
       } else {
         setError("Ismeretlen hiba történt.");
       }
     } catch (err) {
       setError("Hálózati hiba történt.");
-      localStorage.removeItem("token"); // Az invalid tokent töröljük
-      navigate("/login"); // Visszaküldjük a login oldalra
+      localStorage.removeItem("token"); 
+      navigate("/login");
     }
   };
 
