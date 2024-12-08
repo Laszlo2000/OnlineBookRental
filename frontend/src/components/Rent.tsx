@@ -1,5 +1,13 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
+
+interface Book {
+  id: number;
+  title: string;
+  author: string;
+  available: boolean;
+  isbn: BigInteger;
+}
 
 const Rent = () => {
   const [title, setTitle] = useState(""); // Könyvcím mező
@@ -7,6 +15,7 @@ const Rent = () => {
   const [error, setError] = useState(""); // Hibaüzenet
   const navigate = useNavigate();
 
+  const [registeredBooks, setRegisteredBooks] = useState<Book[]>([]);
 
   const handleBorrow = async () => {
     // Előző állapotok törlése
@@ -54,6 +63,37 @@ const Rent = () => {
     }
   };
 
+  useEffect(() => {
+
+    const fetchRegisteredBooks = async () => {
+      const token = localStorage.getItem('token');
+
+      try {
+        const response = await fetch("http://localhost:8080/books", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch registered books.");
+        }
+
+        const books: Book[] = await response.json();
+        setRegisteredBooks(books);
+      } catch (err: any) {
+        console.error("Error:", err.message);
+        setError("Failed to load registered users. Please try again later.");
+      }
+    };
+
+    fetchRegisteredBooks();
+  }, []);
+
+
+
   return (
     <div className="bg-zinc-850 min-h-screen pt-16">
       <div className="flex justify-center items-center p-5">
@@ -89,6 +129,38 @@ const Rent = () => {
           {error && <p className="text-red-500 mt-4 font-bold">{error}</p>}
         </div>
       </div>
+
+      {registeredBooks.length > 0 ? (
+          <div className="max-w-xl mx-auto mt-5 overflow-x-auto">
+            <table className="table-auto border-collapse border border-gray-300 w-full text-sm text-left">
+              <thead className="bg-gray-200">
+              <tr>
+                <th className="border border-gray-300 px-4 py-2">ID</th>
+                <th className="border border-gray-300 px-4 py-2">Title</th>
+                <th className="border border-gray-300 px-4 py-2">Author</th>
+                <th className="border border-gray-300 px-4 py-2">Available</th>
+                <th className="border border-gray-300 px-4 py-2">ISBN</th>
+              </tr>
+              </thead>
+              <tbody>
+              {registeredBooks.map((book) => (
+                  <tr key={book.id} className="hover:bg-gray-100">
+                    <td className="border border-gray-300 px-4 py-2">{book.id}</td>
+                    <td className="border border-gray-300 px-4 py-2">{book.title}</td>
+                    <td className="border border-gray-300 px-4 py-2">{book.author}</td>
+                    <td className="border border-gray-300 px-4 py-2">{book.available}</td>
+                    <td className="border border-gray-300 px-4 py-2">{book.isbn}</td>
+                  </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+      ) : (
+          <p className="text-gray-500 text-center mt-5">
+            No registered books found.
+          </p>
+      )}
+
     </div>
   );
 };

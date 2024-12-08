@@ -73,7 +73,12 @@ public class BookBorrowController {
 
         // Nincs ilyen könyv
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    
+    
     }
+
+    @GetMapping("/books")
+    public List<BookEntity> getAllBooks() { return bookRepository.findAll();}
 }
 
 
