@@ -190,7 +190,7 @@ const Books: React.FC = () => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:8080/books/${bookId}`, {
+            const response = await fetch(`http://localhost:8080/addbook/${bookId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

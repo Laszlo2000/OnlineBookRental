@@ -69,7 +69,7 @@ const Users: React.FC = () => {
     }, []);
 
     return (
-        <div className="p-6 bg-[#d6efd8] min-h-screen">
+        <div className="p-6 bg-[#d6efd8] max-h-screen">
             {registeredUsers.length > 0 ? (
                 <div
                     className="max-w-7xl mx-auto mt-5 overflow-x-auto bg-[#80AF81] border-gray-700 rounded-xl shadow-[0px_0px_30px_rgba(0,0,0,0.3)]">
