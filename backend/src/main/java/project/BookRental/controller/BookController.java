@@ -28,9 +28,12 @@ public class BookController {
     public ResponseEntity<String> addBook(@RequestBody BookEntity book) {
         logger.info("Received book: {}", book);
 
-        if (book.getTitle() == null || book.getAuthor() == null || book.getGenre() == null || book.getIsbn() == null) {
-            System.out.println("Validation failed: missing fields");
-            return ResponseEntity.badRequest().body("All fields are required.");
+        if (book.getTitle() == null || book.getTitle().isEmpty() ||
+                book.getAuthor() == null || book.getAuthor().isEmpty() ||
+                book.getGenre() == null || book.getGenre().isEmpty() ||
+                book.getIsbn() == null || book.getIsbn().signum() <= 0) {
+            System.out.println("Validation failed: missing or empty fields");
+            return ResponseEntity.badRequest().body("All fields are required and cannot be empty.");
         }
         try {
             book.setAvailable(true);
