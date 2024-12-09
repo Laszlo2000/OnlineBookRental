@@ -201,7 +201,11 @@ const Books: React.FC = () => {
             if (response.ok) {
                 setMessage("Book deleted successfully!");
                 setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
-            } else {
+            } else if (response.status === 409) {
+                const errorMessage = await response.text();
+                setMessage(`Cannot delete book: ${errorMessage}`);
+            }
+            else {
                 const errorMessage = await response.text();
                 setMessage(`Failed to delete book: ${errorMessage}`);
             }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import project.BookRental.entity.BookEntity;
 import project.BookRental.entity.UserEntity;
 import project.BookRental.repository.BookRepository;
+import project.BookRental.repository.BorrowedRepository;
 import project.BookRental.repository.UserRepository;
 
 @RestController
@@ -21,6 +22,9 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private BorrowedRepository borrowedRepository;
 
     @Autowired
     private UserRepository userRepository; // Szükséges a role ellenőrzéséhez
@@ -72,13 +76,20 @@ public class BookController {
         }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found."));
     }
 
-    // Delete Book
-    // tomcat jetty ghostfish
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id) {
         logger.info("Deleting book with ID: {}", id);
 
         return bookRepository.findById(id).map(book -> {
+            boolean isBorrowed = false;
+            if (!borrowedRepository.findAllByBook_Id(id).isEmpty()){
+                isBorrowed = true;
+            }
+            if (isBorrowed) {
+                logger.warn("Cannot delete book with ID {} as it is currently borrowed.", id);
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Cannot delete the book because it is currently borrowed.");
+            }
             bookRepository.delete(book);
             logger.info("Book deleted successfully!");
             return ResponseEntity.ok("Book deleted successfully!");
