@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import project.BookRental.entity.BookEntity;
@@ -57,11 +58,9 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Role not found");
     }
 
-    // Update Book
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateBook(@PathVariable Long id, @RequestBody BookEntity updatedBook) {
-        logger.info("Updating book with ID: {}", id);
-
         return bookRepository.findById(id).map(book -> {
             book.setTitle(updatedBook.getTitle());
             book.setAuthor(updatedBook.getAuthor());
@@ -69,13 +68,8 @@ public class BookController {
             book.setIsbn(updatedBook.getIsbn());
             book.setAvailable(updatedBook.isAvailable());
             bookRepository.save(book);
-            logger.info("Book updated successfully!");
             return ResponseEntity.ok("Book updated successfully!");
-        }).orElseGet(() -> {
-            logger.error("Book with ID {} not found", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Book not found.");
-        });
+        }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found."));
     }
 
     // Delete Book
