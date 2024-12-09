@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Login from './components/Login';
 import Register from './components/Register';
 import UserProfile from './components/UserProfile';
-import AddBook from './components/AddNewBook';
 import Rent from "./components/Rent.tsx";
 import Return from "./components/Return.tsx";
 import Navbar from './components/Navbar.tsx';
@@ -20,7 +19,6 @@ const App: React.FC = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/userprofile" element={<UserProfile />} />
-                <Route path="/addbook" element={<AddBook />} />
                 <Route path="/rent" element={<Rent />} />
                 <Route path="/return" element={<Return />} />
                 <Route path="/admin/addbook" element={<Books />} />
