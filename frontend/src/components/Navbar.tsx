@@ -82,12 +82,14 @@ const Navbar: React.FC = () => {
                     <div className="absolute mt-2 w-32 bg-[#336438] rounded shadow-lg z-50">
                       <Link
                           to="/admin/addbook"
+                          onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
                           className="block px-4 py-2 hover:bg-[#254729] rounded transition duration-300 text-white"
                       >
                         Books
                       </Link>
                       <Link
                           to="/admin/users"
+                          onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
                           className="block px-4 py-2 hover:bg-[#254729] rounded transition duration-300 text-white"
                       >
                         Users
@@ -96,6 +98,7 @@ const Navbar: React.FC = () => {
                 )}
               </div>
           )}
+
 
           <button
               onClick={handleLogout}

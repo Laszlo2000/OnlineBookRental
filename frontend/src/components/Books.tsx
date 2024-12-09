@@ -152,7 +152,7 @@ const Books: React.FC = () => {
                                 <TableHead className="font-bold">Author</TableHead>
                                 <TableHead className="font-bold">Genre</TableHead>
                                 <TableHead className="font-bold">ISBN</TableHead>
-                                <TableHead className="font-bold place-content-center">Edit</TableHead>
+                                <TableHead className="font-bold">Edit</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "./ui/table.tsx";
 
 
 
@@ -141,7 +141,7 @@ const Rent = () => {
       </div>
 
       {registeredBooks.length > 0 ? (
-          <div className="max-w-7xl mx-auto mt-5 overflow-x-auto rounded bg-[#80AF81] border-gray-700 rounded-xl shadow-[0px_0px_30px_rgba(0,0,0,0.3)]">
+          <div className="max-w-7xl mx-auto mt-5 overflow-x-auto bg-[#80AF81] border-gray-700 rounded-xl shadow-[0px_0px_30px_rgba(0,0,0,0.3)]">
             <Table className="">
               <TableHeader className="bg-[#508D4E] border-b-2 border-[#D6EFD8]">
               <TableRow>

@@ -8,6 +8,7 @@ import Rent from "./components/Rent.tsx";
 import Return from "./components/Return.tsx";
 import Navbar from './components/Navbar.tsx';
 import Books from "./components/Books.tsx";
+import Users from "./components/Users.tsx";
 
 const App: React.FC = () => {
 
@@ -23,6 +24,7 @@ const App: React.FC = () => {
                 <Route path="/rent" element={<Rent />} />
                 <Route path="/return" element={<Return />} />
                 <Route path="/admin/addbook" element={<Books />} />
+                <Route path="admin/users" element={<Users />} />
             </Routes>
         </Router>
     );
