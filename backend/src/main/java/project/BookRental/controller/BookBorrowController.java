@@ -1,5 +1,7 @@
 package project.BookRental.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 @RestController
 public class BookBorrowController {
+
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Autowired
     private BookRepository bookRepository;
@@ -79,6 +83,21 @@ public class BookBorrowController {
 
     @GetMapping("/books")
     public List<BookEntity> getAllBooks() { return bookRepository.findAll();}
+
+    @GetMapping("/books/{id}")
+    public ResponseEntity<BookEntity> getBookById(@PathVariable Long id) {
+        logger.info("Received request for book with ID: {}", id);
+
+        return bookRepository.findById(id)
+                .map(book -> {
+                    logger.info("Book found: {}", book);
+                    return ResponseEntity.ok(book);
+                })
+                .orElseGet(() -> {
+                    logger.warn("Book with ID {} not found.", id);
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                });
+    }
 }
 
 
