@@ -53,4 +53,42 @@ public class BookController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Role not found");
     }
+
+    // Update Book
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateBook(@PathVariable Long id, @RequestBody BookEntity updatedBook) {
+        logger.info("Updating book with ID: {}", id);
+
+        return bookRepository.findById(id).map(book -> {
+            book.setTitle(updatedBook.getTitle());
+            book.setAuthor(updatedBook.getAuthor());
+            book.setGenre(updatedBook.getGenre());
+            book.setIsbn(updatedBook.getIsbn());
+            book.setAvailable(updatedBook.isAvailable());
+            bookRepository.save(book);
+            logger.info("Book updated successfully!");
+            return ResponseEntity.ok("Book updated successfully!");
+        }).orElseGet(() -> {
+            logger.error("Book with ID {} not found", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Book not found.");
+        });
+    }
+
+    // Delete Book
+    // tomcat jetty ghostfish
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBook(@PathVariable Long id) {
+        logger.info("Deleting book with ID: {}", id);
+
+        return bookRepository.findById(id).map(book -> {
+            bookRepository.delete(book);
+            logger.info("Book deleted successfully!");
+            return ResponseEntity.ok("Book deleted successfully!");
+        }).orElseGet(() -> {
+            logger.error("Book with ID {} not found", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Book not found.");
+        });
+    }
 }

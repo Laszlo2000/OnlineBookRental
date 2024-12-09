@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "./ui/table.tsx";
 
+interface Book {
+    id: number;
+    title: string;
+    author: string;
+    available: boolean;
+    genre: string;
+    isbn: BigInteger;
+}
+
 const Books: React.FC = () => {
     const [formData, setFormData] = useState({
         title: "",
@@ -10,6 +19,94 @@ const Books: React.FC = () => {
     });
     const [message, setMessage] = useState<string | null>(null);
     const [books, setBooks] = useState<any[]>([]);
+
+    const [editBookId, setEditBookId] = useState<number | null>(null);
+    const [editedBook, setEditedBook] = useState<Book | null>(null);
+
+    const handleEditClick = (book: Book) => {
+        setEditBookId(book.id);
+        setEditedBook({ ...book }); // Clone the book to allow edits
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Book) => {
+        if (editedBook) {
+            setEditedBook({
+                ...editedBook,
+                [field]: e.target.value,
+            });
+        }
+    };
+
+    const handleCancelClick = () => {
+        setEditBookId(null);
+        setEditedBook(null);
+    };
+
+    const handleSaveClick = async () => {
+        if (editedBook) {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    setMessage("Unauthorized. Please log in again.");
+                    return;
+                }
+
+                const response = await fetch(`http://localhost:8080/books/${editedBook.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(editedBook),
+                });
+                if (response.ok) {
+                    console.log("Book updated successfully");
+                    // Update the local state with the saved book
+                    setBooks((prevBooks) =>
+                        prevBooks.map((b) => (b.id === editedBook.id ? editedBook : b))
+                    );
+                }
+            } catch (error) {
+                console.error("Error updating book:", error);
+            } finally {
+                setEditBookId(null);
+                setEditedBook(null);
+            }
+        }
+    };
+
+    const handleDeleteClick = async (bookId: number) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this book?");
+        if (!confirmDelete) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setMessage("Unauthorized. Please log in again.");
+                return;
+            }
+
+            const response = await fetch(`http://localhost:8080/books/${bookId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete the book.");
+            }
+
+            console.log("Book deleted successfully");
+            // Remove the book from local state
+            setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+        } catch (error) {
+            console.error("Error deleting book:", error);
+            alert("Failed to delete the book. Please try again.");
+        }
+    };
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -158,23 +255,85 @@ const Books: React.FC = () => {
                         <TableBody>
                             {books.map((book) => (
                                 <TableRow className="text-black font-bold border-[#D6EFD8] border-b-2" key={book.id}>
-                                    <TableCell>{book.title}</TableCell>
-                                    <TableCell>{book.author}</TableCell>
-                                    <TableCell>{book.genre}</TableCell>
-                                    <TableCell>{book.isbn}</TableCell>
-                                    <TableCell>
-                                        <div className="flex gap-2">
-                                            <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded">
-                                                Edit
-                                            </button>
-                                            <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </TableCell>
+                                    {editBookId === book.id ? (
+                                        <>
+                                            <TableCell>
+                                                <input
+                                                    type="text"
+                                                    value={editedBook?.title || ""}
+                                                    onChange={(e) => handleInputChange(e, "title")}
+                                                    className="w-full p-1 border rounded"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <input
+                                                    type="text"
+                                                    value={editedBook?.author || ""}
+                                                    onChange={(e) => handleInputChange(e, "author")}
+                                                    className="w-full p-1 border rounded"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <input
+                                                    type="text"
+                                                    value={editedBook?.genre || ""}
+                                                    onChange={(e) => handleInputChange(e, "genre")}
+                                                    className="w-full p-1 border rounded"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <input
+                                                    type="text"
+                                                    value={editedBook?.isbn?.toString() || ""}
+                                                    onChange={(e) => handleInputChange(e, "isbn")}
+                                                    className="w-full p-1 border rounded"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={handleSaveClick}
+                                                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded"
+                                                    >
+                                                        Save
+                                                    </button>
+                                                    <button
+                                                        onClick={handleCancelClick}
+                                                        className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-2 rounded"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </TableCell>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <TableCell>{book.title}</TableCell>
+                                            <TableCell>{book.author}</TableCell>
+                                            <TableCell>{book.genre}</TableCell>
+                                            <TableCell>{book.isbn}</TableCell>
+                                            <TableCell>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => handleEditClick(book)}
+                                                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteClick(book.id)}
+                                                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </TableCell>
+                                        </>
+                                    )}
                                 </TableRow>
                             ))}
                         </TableBody>
+
                     </Table>
                 </div>
             ) : (<p className="text-[#000]"></p>)
