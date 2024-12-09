@@ -7,6 +7,7 @@ import AddBook from './components/AddNewBook';
 import Rent from "./components/Rent.tsx";
 import Return from "./components/Return.tsx";
 import Navbar from './components/Navbar.tsx';
+import Books from "./components/Books.tsx";
 
 const App: React.FC = () => {
 
@@ -21,6 +22,7 @@ const App: React.FC = () => {
                 <Route path="/addbook" element={<AddBook />} />
                 <Route path="/rent" element={<Rent />} />
                 <Route path="/return" element={<Return />} />
+                <Route path="/admin/addbook" element={<Books />} />
             </Routes>
         </Router>
     );
