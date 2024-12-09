@@ -29,7 +29,7 @@ const Rent = () => {
       setError("Kérlek, add meg a könyv címét!");
       return;
     }
-    const token = localStorage.getItem("token"); // Kiszedjük a Local Storage-ből a JWT-t
+    const token = localStorage.getItem("token");
 
     if (!token) {
       navigate("/login");
@@ -41,7 +41,7 @@ const Rent = () => {
         method: "PUT",
         credentials: "include",
         headers: {
-          Authorization: `Bearer ${token}`, // A JWT-t odaadjuk a headernek
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ title })

@@ -9,7 +9,6 @@ const Return: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // API-hívás az aktuálisan kölcsönzött könyvek lekéréséhez
     const fetchBooks = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -27,7 +26,7 @@ const Return: React.FC = () => {
 
         if (res.ok) {
           const data = await res.json();
-          setBooks(data.map((book: { title: string }) => book.title)); // Csak a címek kellenek
+          setBooks(data.map((book: { title: string }) => book.title));
         } else if (res.status === 401) {
           navigate("/login");
         } else {
@@ -43,7 +42,6 @@ const Return: React.FC = () => {
   }, [navigate]);
 
   const handleReturn = async () => {
-    // Előző válaszok és hibák törlése
     setResponse(null);
     setError(null);
 
@@ -75,7 +73,7 @@ const Return: React.FC = () => {
         setError("A megadott könyv nem található.");
       } else if (res.ok) {
         const data = await res.json();
-        setResponse(`Sikeresen visszahoztad a(z) "${data.title}" című könyvet!`);
+        setResponse(`You have successfully returned the book "${data.title}"`);
         setBooks((prevBooks) => prevBooks.filter((book) => book !== title));
         setTitle("");
       } else {
@@ -89,9 +87,9 @@ const Return: React.FC = () => {
   };
 
   return (
-      <div className="bg-zinc-850 min-h-screen pt-16">
+      <div className="bg-[#D6EFD8] pt-16 pb-2">
         <div className="flex justify-center items-center p-5">
-          <div className="max-w-xl min-w-96 text-center font-sans text-zinc-800 bg-zinc-100 p-6 rounded-lg shadow-lg">
+          <div className="max-w-96 min-w-96 text-center text-black bg-[#80AF81] p-6 rounded-xl shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
             <h1 className="mb-5 text-2xl font-bold">Return a book</h1>
             <form
                 onSubmit={(e) => {
@@ -100,15 +98,12 @@ const Return: React.FC = () => {
                 }}
             >
               <div>
-                <label htmlFor="title" className="block pb-3">
-                  Select a book
-                </label>
                 <select
                     id="title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     required
-                    className="p-2 mb-4 border border-gray-300 rounded-md w-full"
+                    className="p-2 mb-4 border border-gray-300 rounded-md max-w-50px"
                 >
                   <option value="">Choose a book</option>
                   {books.map((book, index) => (
@@ -120,15 +115,15 @@ const Return: React.FC = () => {
               </div>
               <button
                   type="submit"
-                  className="w-28 p-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md cursor-pointer"
+                  className="w-28 p-2 px-4 bg-[#2b3b2d] hover:bg-[#202b21] text-white rounded"
               >
                 Return
               </button>
             </form>
 
             {/* Sikeres válasz vagy hibaüzenet megjelenítése */}
-            {response && <p className="text-green-500 mt-4 font-bold">{response}</p>}
-            {error && <p className="text-red-500 mt-4 font-bold">{error}</p>}
+            {response && <p className="mt-4 font-bold">{response}</p>}
+            {error && <p className=" mt-4 font-bold">{error}</p>}
           </div>
         </div>
       </div>
