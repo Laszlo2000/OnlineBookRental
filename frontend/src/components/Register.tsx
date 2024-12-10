@@ -41,8 +41,8 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center h-screen w-screen bg-zinc-850 fixed top-0 left-0">
-      <form onSubmit={handleRegister} className="flex flex-col gap-4 w-72 bg-zinc-700 p-6 rounded-lg shadow-lg">
-        <h1 className="text-center text-white mb-5 text-3xl">Register</h1>
+      <form onSubmit={handleRegister} className="flex flex-col gap-4 w-72 bg-[#80AF81] p-6 rounded-xl shadow-lg">
+        <h1 className="text-center font-bold text-black mb-5 text-3xl">Register</h1>
         <input
           type="text"
           id="username"
@@ -50,7 +50,7 @@ const Register = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          className="p-2 border border-gray-300 rounded-md bg-black text-white"
+          className="p-2 border border-gray-300 rounded-md w-full text-black"
         />
         <input
           type="email"
@@ -59,7 +59,7 @@ const Register = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="p-2 border border-gray-300 rounded-md bg-black text-white"
+          className="p-2 border border-gray-300 rounded-md w-full text-black"
         />
         <input
           type="password"
@@ -68,14 +68,14 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="p-2 border border-gray-300 rounded-md bg-black text-white"
+          className="p-2 border border-gray-300 rounded-md w-full text-black"
         />
-        <button type="submit" className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md cursor-pointer">
+        <button type="submit" className="p-2 bg-[#2A3B2D] hover:bg-[#202B21] text-white rounded-md cursor-pointer">
           Register
         </button>
-        <p className="text-center">
+        <p className="text-center text-black">
           Already have an account? <br />{" "}
-          <a href="/login" className="text-blue-400">
+          <a href="/login" className="text-blue-700">
             Sign in here!{" "}
           </a>
         </p>
