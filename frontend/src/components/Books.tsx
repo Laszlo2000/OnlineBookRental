@@ -161,7 +161,7 @@ const Books: React.FC = () => {
                             book.id === editedBook.id ? { ...editedBook } : book
                         )
                     );
-                    setMessage("Book updated successfully!");
+                    alert("Book deleted successfully!");
                     // Bezárja az edit módot
                     setEditBookId(null);
                     setEditedBook(null);
@@ -199,11 +199,11 @@ const Books: React.FC = () => {
             });
 
             if (response.ok) {
-                setMessage("Book deleted successfully!");
+                alert("Book deleted successfully!");
                 setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
             } else if (response.status === 409) {
                 const errorMessage = await response.text();
-                setMessage(`Cannot delete book: ${errorMessage}`);
+                alert(`${errorMessage}`);
             }
             else {
                 const errorMessage = await response.text();
