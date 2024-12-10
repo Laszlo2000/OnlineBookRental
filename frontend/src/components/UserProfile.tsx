@@ -57,29 +57,29 @@ const UserProfile: React.FC = () => {
     return (
 <div className="bg-zinc-850 min-h-screen pt-16">
   {/* Tartalom */}
-  <div className="flex justify-center items-center p-5">
-    <div className="max-w-xl text-center font-sans text-zinc-800 bg-zinc-100 p-6 rounded-lg shadow-lg">
-      <h1 className="mb-5 text-2xl font-bold">User Profile</h1>
-      <p className="text-lg mb-2">
+  <div className="flex justify-center mt-6">
+    <div className="bg-[#80AF81] rounded-xl shadow-lg p-6 w-96">
+      <h1 className="text-xl font-bold mb-4 text-[#000] text-center">User Profile</h1>
+      <p className="text-lg mb-2 text-[#000] text-center">
         <strong>Username:</strong> {userData?.username}
       </p>
-      <p className="text-lg mb-2">
+      <p className="text-lg mb-2 text-[#000] text-center">
         <strong>Email:</strong> {userData?.email}
       </p>
-      <h2 className="mt-8 text-xl">Borrowed Books</h2>
+      <h2 className="mt-8 text-xl font-bold text-[#000] text-center">Borrowed Books</h2>
       {userData?.borrowedBooks && userData.borrowedBooks.length > 0 ? (
         <ul className="list-none p-0 mt-5">
           {userData.borrowedBooks.map((title, index) => (
             <li
               key={index}
-              className="p-3 my-2 bg-gray-200 rounded-md text-center"
+              className="p-3 my-2 bg-[#2a3b2d] hover:bg-[#202B21] rounded-md text-center"
             >
               {title}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-gray-500 mt-5">
+        <p className="text-black mt-5 text-center">
           You have not borrowed any books.
         </p>
       )}
