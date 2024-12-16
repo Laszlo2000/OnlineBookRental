@@ -161,7 +161,7 @@ const Books: React.FC = () => {
                             book.id === editedBook.id ? { ...editedBook } : book
                         )
                     );
-                    alert("Book deleted successfully!");
+                    alert("Book updated successfully!");
                     // Bezárja az edit módot
                     setEditBookId(null);
                     setEditedBook(null);
